@@ -9,7 +9,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "http://mern-customer-management.vercel.app/"
+  ]
+}));
 app.use(express.json()); //allows us to accept JSON data from the req.body
 
 app.use("/api/customers", customerRoutes)
