@@ -9,12 +9,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000
 
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "http://mern-customer-management.vercel.app/"
-  ]
-}));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://mern-customer-management.vercel.app",
+  process.env.FRONTEND_URL, // optional: extra origin set on Render
+]
+  .filter(Boolean)
+  .map((o) => o.replace(/\/+$/, "")); // origins never have a trailing slash
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+  }),
+);
 app.use(express.json()); //allows us to accept JSON data from the req.body
 
 app.use("/api/customers", customerRoutes)
